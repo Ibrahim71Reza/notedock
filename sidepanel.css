@@ -1,0 +1,737 @@
+* {
+box-sizing: border-box;
+}
+
+:root {
+--bg: #081018;
+--bg-soft: #0c1523;
+--panel: #0d1727;
+--panel-2: #111d30;
+--panel-3: #182842;
+--panel-4: #203252;
+--border: #263b5a;
+--border-soft: #1c2b43;
+--text: #eff5ff;
+--muted: #9fb0c8;
+--accent: #7aa9ff;
+--accent-2: #5f8dff;
+--favorite: #ffd65a;
+--danger: #ff8c8c;
+--danger-bg: #351b20;
+--danger-border: #6a343e;
+--selected-image: #7db4ff;
+--shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+--radius: 14px;
+--radius-sm: 10px;
+}
+
+html,
+body {
+margin: 0;
+padding: 0;
+width: 100%;
+height: 100%;
+background: var(--bg);
+color: var(--text);
+font-family: Inter, Arial, sans-serif;
+overflow: hidden;
+}
+
+body {
+min-height: 100vh;
+}
+
+button,
+input {
+font: inherit;
+}
+
+.app {
+display: flex;
+flex-direction: column;
+height: 100vh;
+width: 100%;
+min-height: 0;
+background:
+    radial-gradient(circle at top, rgba(94, 136, 255, 0.12), transparent 30%),
+    linear-gradient(180deg, #0a1320 0%, #081018 100%);
+}
+
+/* top header */
+
+.topHeader {
+flex: 0 0 auto;
+display: flex;
+flex-direction: column;
+gap: 0;
+padding: 7px 8px;
+border-bottom: 1px solid var(--border-soft);
+background: rgba(12, 20, 33, 0.96);
+-webkit-backdrop-filter: blur(8px);
+backdrop-filter: blur(8px);
+}
+
+.topMainRow {
+display: grid;
+grid-template-columns: minmax(0, 1fr) auto auto;
+gap: 5px;
+align-items: center;
+}
+
+.headerTitleInput {
+width: 100%;
+min-width: 0;
+height: 30px;
+padding: 0 9px;
+border-radius: 10px;
+border: 1px solid var(--border);
+background: linear-gradient(180deg, #091321 0%, #08111d 100%);
+color: var(--text);
+font-size: 12px;
+font-weight: 700;
+outline: none;
+box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.headerTitleInput:focus {
+border-color: var(--accent);
+box-shadow: 0 0 0 3px rgba(122, 169, 255, 0.16);
+}
+
+.headerRightCluster {
+display: contents;
+}
+
+.saveStatus {
+font-size: 9px;
+color: var(--muted);
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+min-width: 0;
+max-width: 56px;
+}
+
+.headerActions {
+display: grid;
+grid-template-columns: repeat(5, 28px);
+gap: 4px;
+align-items: center;
+}
+
+.topIconBtn {
+width: 28px;
+height: 28px;
+min-width: 28px;
+min-height: 28px;
+padding: 0;
+border-radius: 8px;
+border: 1px solid var(--border);
+background: linear-gradient(180deg, #142238 0%, #122036 100%);
+color: var(--text);
+cursor: pointer;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+transition: 0.18s ease;
+font-size: 10px;
+}
+
+.topIconBtn:hover {
+background: linear-gradient(180deg, #1b2f4d 0%, #17304f 100%);
+border-color: #3f628f;
+}
+
+.primaryBtn {
+background: linear-gradient(180deg, #1e4ea8 0%, #19458f 100%);
+border-color: #4b79d6;
+}
+
+.primaryBtn:hover {
+background: linear-gradient(180deg, #2961c7 0%, #2356af 100%);
+}
+
+/* tools */
+
+.toolsPanel {
+flex: 0 0 auto;
+overflow: hidden;
+max-height: 0;
+border-bottom: 1px solid transparent;
+background: rgba(11, 19, 31, 0.98);
+transition: max-height 0.24s ease, border-color 0.2s ease;
+}
+
+.toolsPanel.open {
+border-bottom-color: var(--border-soft);
+}
+
+.toolsScroll {
+overflow: auto;
+max-height: min(42vh, 320px);
+padding: 7px;
+}
+
+.toolGrid {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 7px;
+}
+
+.toolCard {
+min-width: 0;
+border: 1px solid var(--border-soft);
+background: linear-gradient(180deg, rgba(17, 29, 48, 0.95) 0%, rgba(12, 21, 35, 0.95) 100%);
+border-radius: 12px;
+padding: 7px;
+box-shadow: var(--shadow);
+}
+
+.toolCardTitle {
+font-size: 9px;
+font-weight: 800;
+letter-spacing: 0.25px;
+text-transform: uppercase;
+color: #c2d0e5;
+margin-bottom: 5px;
+line-height: 1.2;
+}
+
+.toolGroup {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 5px;
+}
+
+.toolGroup button,
+.toolButtonLike {
+min-width: 0;
+width: 100%;
+min-height: 27px;
+padding: 0 6px;
+border-radius: 7px;
+border: 1px solid var(--border);
+background: linear-gradient(180deg, #182842 0%, #142338 100%);
+color: var(--text);
+cursor: pointer;
+font-size: 10px;
+font-weight: 600;
+line-height: 1;
+text-align: center;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+transition: 0.18s ease;
+}
+
+.toolGroup button:hover,
+.toolButtonLike:hover {
+background: linear-gradient(180deg, #22385b 0%, #1b3150 100%);
+border-color: #466993;
+}
+
+.toolButtonLike {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+}
+
+.wideBtn {
+min-width: 0;
+}
+
+.toolFieldWrap {
+display: flex;
+flex-direction: column;
+gap: 4px;
+}
+
+.toolFieldLabel {
+font-size: 10px;
+color: var(--muted);
+font-weight: 600;
+}
+
+.toolInput {
+width: 100%;
+min-width: 0;
+min-height: 28px;
+padding: 5px 7px;
+border-radius: 8px;
+border: 1px solid var(--border);
+background: #091321;
+color: var(--text);
+outline: none;
+font-size: 11px;
+}
+
+.toolInput:focus {
+border-color: var(--accent);
+box-shadow: 0 0 0 3px rgba(122, 169, 255, 0.16);
+}
+
+.dangerBtn {
+background: linear-gradient(180deg, #47232a 0%, #391c22 100%) !important;
+border-color: var(--danger-border) !important;
+color: #ffd9df !important;
+}
+
+/* tool card layout for sidebar */
+
+.toolGrid > .toolCard:nth-child(2) {
+grid-column: 1;
+grid-row: 1;
+}
+
+.toolGrid > .toolCard:nth-child(4) {
+grid-column: 2;
+grid-row: 1;
+}
+
+.toolGrid > .toolCard:nth-child(1) {
+grid-column: 1;
+grid-row: 2;
+}
+
+.toolGrid > .toolCard:nth-child(3) {
+grid-column: 2;
+grid-row: 2;
+}
+
+.toolGrid > .toolCard:nth-child(6) {
+grid-column: 1;
+grid-row: 3;
+}
+
+.toolGrid > .toolCard:nth-child(7) {
+grid-column: 2;
+grid-row: 3;
+}
+
+.toolGrid > .toolCard:nth-child(5) {
+grid-column: 1 / -1;
+grid-row: 4;
+}
+
+/* editor */
+
+.editorShell {
+display: flex;
+flex-direction: column;
+min-height: 0;
+flex: 1 1 auto;
+}
+
+.editorMain {
+flex: 1 1 auto;
+min-height: 0;
+overflow: auto;
+}
+
+.editorCanvas {
+min-width: 100%;
+width: max-content;
+min-height: 100%;
+}
+
+.editor {
+min-height: 100%;
+min-width: 100%;
+padding: 12px 14px 40px;
+outline: none;
+font-size: 15px;
+line-height: 1.75;
+color: var(--text);
+white-space: pre-wrap;
+overflow-wrap: normal;
+caret-color: #d8e7ff;
+}
+
+.editor.image-select-mode {
+caret-color: transparent;
+}
+
+.editor.drag-over {
+outline: 2px dashed var(--accent);
+outline-offset: -6px;
+background: rgba(118, 169, 255, 0.06);
+}
+
+.editor:empty::before {
+content: attr(data-placeholder);
+color: #7d8ca3;
+pointer-events: none;
+}
+
+.editor a {
+color: #7cd0ff;
+text-decoration: underline;
+cursor: pointer;
+}
+
+.editor img.inline-note-image {
+display: block;
+max-width: 100%;
+height: auto;
+margin: 12px 0;
+border-radius: 12px;
+border: 1px solid var(--border);
+box-shadow: var(--shadow);
+-webkit-user-select: none;
+user-select: none;
+-webkit-user-drag: none;
+}
+
+.editor img.inline-note-image.selected-note-image {
+outline: 2px solid var(--selected-image);
+outline-offset: 2px;
+}
+
+.editor blockquote {
+margin: 12px 0;
+padding: 10px 12px;
+border-left: 4px solid var(--accent);
+background: rgba(118, 169, 255, 0.08);
+border-radius: 10px;
+color: #e5efff;
+}
+
+.editor pre.note-code {
+margin: 12px 0;
+padding: 12px;
+background: #09111d;
+border: 1px solid var(--border);
+border-radius: 12px;
+overflow: auto;
+white-space: pre;
+}
+
+.editor hr {
+border: none;
+border-top: 1px solid var(--border);
+margin: 16px 0;
+}
+
+.editor table.note-table {
+border-collapse: collapse;
+margin: 14px 0;
+min-width: 420px;
+background: #0d1522;
+}
+
+.editor table.note-table th,
+.editor table.note-table td {
+border: 1px solid var(--border);
+padding: 8px 10px;
+text-align: left;
+vertical-align: top;
+min-width: 90px;
+}
+
+.editor table.note-table th {
+background: #152236;
+font-weight: 700;
+}
+
+/* notes drawer */
+
+.notesDrawer {
+overflow: hidden;
+flex: 0 0 auto;
+max-height: 0;
+border-top: 1px solid transparent;
+background: rgba(12, 20, 32, 0.98);
+transition: max-height 0.22s ease, border-color 0.22s ease;
+}
+
+.notesDrawer.open {
+border-top-color: var(--border-soft);
+}
+
+.drawerHeader {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+padding: 10px;
+border-bottom: 1px solid var(--border-soft);
+flex-wrap: wrap;
+}
+
+.drawerTitle {
+font-size: 13px;
+font-weight: 800;
+color: #d8e6fb;
+}
+
+.drawerHeaderActions {
+display: flex;
+gap: 8px;
+align-items: center;
+flex-wrap: wrap;
+}
+
+.drawerFilters {
+display: flex;
+gap: 8px;
+}
+
+.drawerFilterBtn,
+.drawerCloseBtn {
+min-height: 36px;
+padding: 0 12px;
+border-radius: 10px;
+border: 1px solid var(--border);
+background: linear-gradient(180deg, #182842 0%, #142338 100%);
+color: var(--text);
+cursor: pointer;
+}
+
+.drawerFilterBtn.active {
+background: linear-gradient(180deg, #2350a2 0%, #1e478f 100%);
+border-color: #5d8ed8;
+}
+
+.drawerSearch {
+min-height: 36px;
+padding: 8px 10px;
+border-radius: 10px;
+border: 1px solid var(--border);
+background: #091321;
+color: var(--text);
+outline: none;
+}
+
+.notesList {
+display: grid;
+grid-auto-flow: column;
+grid-auto-columns: minmax(210px, 250px);
+gap: 10px;
+overflow-x: auto;
+overflow-y: hidden;
+padding: 10px;
+}
+
+.noteItem {
+border: 1px solid var(--border-soft);
+background: linear-gradient(180deg, #121d2f 0%, #101827 100%);
+border-radius: 14px;
+padding: 12px;
+cursor: pointer;
+min-height: 104px;
+position: relative;
+transition: 0.18s ease;
+}
+
+.noteItem:hover {
+border-color: #4c6d98;
+background: linear-gradient(180deg, #16263d 0%, #132136 100%);
+}
+
+.noteItem.active {
+border-color: var(--accent);
+background: linear-gradient(180deg, #183055 0%, #172949 100%);
+}
+
+.noteItem.favorite {
+box-shadow: inset 0 0 0 1px rgba(255, 214, 90, 0.4);
+}
+
+.noteItem.trashed {
+box-shadow: inset 0 0 0 1px rgba(255, 138, 138, 0.35);
+}
+
+.noteItemStar,
+.noteItemTrash {
+position: absolute;
+top: 10px;
+right: 12px;
+font-size: 13px;
+}
+
+.noteItemStar {
+color: var(--favorite);
+}
+
+.noteItemTrash {
+color: var(--danger);
+}
+
+.noteItemTitle {
+font-weight: 700;
+font-size: 13px;
+margin-bottom: 6px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+padding-right: 20px;
+}
+
+.noteItemMeta {
+font-size: 11px;
+color: var(--muted);
+margin-bottom: 6px;
+}
+
+.noteItemPreview {
+font-size: 11px;
+color: #cad5e8;
+line-height: 1.4;
+max-height: 32px;
+overflow: hidden;
+margin-bottom: 8px;
+}
+
+.noteTags {
+display: flex;
+flex-wrap: wrap;
+gap: 4px;
+}
+
+.noteTag {
+font-size: 10px;
+padding: 3px 6px;
+border-radius: 999px;
+background: #21314c;
+color: #dce7ff;
+border: 1px solid #335179;
+}
+
+/* responsive */
+
+@media (max-width: 520px) {
+.topHeader {
+    padding: 6px 7px;
+}
+
+.topMainRow {
+    gap: 4px;
+}
+
+.headerTitleInput {
+    height: 29px;
+    padding: 0 8px;
+    font-size: 12px;
+}
+
+.saveStatus {
+    max-width: 48px;
+    font-size: 8px;
+}
+
+.headerActions {
+    grid-template-columns: repeat(5, 27px);
+    gap: 3px;
+}
+
+.topIconBtn {
+    width: 27px;
+    height: 27px;
+    min-width: 27px;
+    min-height: 27px;
+    font-size: 10px;
+}
+
+.toolsScroll {
+    max-height: min(40vh, 300px);
+    padding: 6px;
+}
+
+.toolGrid {
+    gap: 6px;
+}
+
+.toolCard {
+    padding: 6px;
+    border-radius: 11px;
+}
+
+.toolCardTitle {
+    font-size: 8px;
+    margin-bottom: 4px;
+}
+
+.toolGroup {
+    gap: 4px;
+}
+
+.toolGroup button,
+.toolButtonLike {
+    min-height: 26px;
+    padding: 0 5px;
+    font-size: 9px;
+    border-radius: 7px;
+}
+
+.toolInput {
+    min-height: 27px;
+    font-size: 10px;
+    padding: 5px 6px;
+}
+}
+
+@media (max-width: 420px) {
+.saveStatus {
+    display: none;
+}
+
+.topMainRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.headerActions {
+    grid-template-columns: repeat(5, 26px);
+}
+
+.topIconBtn {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
+    font-size: 9px;
+}
+
+.toolGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.toolGroup {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.drawerHeader {
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.drawerHeaderActions {
+    width: 100%;
+}
+
+.drawerSearch {
+    width: 100%;
+}
+
+.notesList {
+    grid-auto-columns: minmax(170px, 1fr);
+}
+}
+
+@media (max-height: 720px) {
+.toolsScroll {
+    max-height: min(34vh, 240px);
+}
+
+.notesDrawer.open {
+    max-height: min(28vh, 220px) !important;
+}
+
+.headerTitleInput {
+    height: 29px;
+}
+
+.topIconBtn {
+    height: 27px;
+    min-height: 27px;
+}
+}

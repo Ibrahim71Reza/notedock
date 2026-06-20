@@ -1,0 +1,29 @@
+{
+"manifest_version": 3,
+"name": "NoteDock — Sidebar Notes & Web Clipper",
+"version": "1.2.0",
+"description": "A lightweight browser sidebar extension for notes, inline images, tables, links, quick memos, and web clipping with local autosave.",
+"permissions": [
+    "storage",
+    "downloads",
+    "tabs",
+    "unlimitedStorage",
+    "contextMenus",
+    "sidePanel"
+],
+"background": {
+    "service_worker": "background.js"
+},
+"action": {
+    "default_title": "Open NoteDock"
+},
+"side_panel": {
+    "default_path": "sidepanel.html"
+},
+"icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+}
+}

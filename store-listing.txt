@@ -1,0 +1,26 @@
+NAME
+NoteDock — Sidebar Notes & Web Clipper
+
+SHORT DESCRIPTION
+A lightweight sidebar note-taking extension for text, images, tables, links, and web clipping with local autosave.
+
+LONG DESCRIPTION
+NoteDock is a local-first sidebar notebook built for browsing, study, research, and productivity.
+
+Create notes directly inside your browser sidebar and keep working without switching tabs. Add text, links, pasted images, drag-and-drop images, code blocks, quotes, lists, and tables. Organize notes with tags, favorites, search, trash, and restore. Export notes in multiple formats and back up your whole workspace locally.
+
+Features:
+- Sidebar notes
+- Rich text editing
+- Inline images
+- Paste and drag/drop image support
+- Tables with row and column controls
+- Clickable links
+- Tags and favorites
+- Search notes
+- Trash, restore, and permanent delete
+- Duplicate notes
+- Export to NDock, TXT, HTML, Markdown, and PDF
+- Full local backup and restore
+- Local-first autosave
+- Resizable tools/editor/notes layout

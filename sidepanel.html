@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NoteDock</title>
+<link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body>
+<div class="app">
+    <header class="topHeader">
+    <div class="topMainRow">
+        <input
+        id="noteTitle"
+        class="headerTitleInput"
+        type="text"
+        placeholder="Untitled note"
+        aria-label="Note title"
+        />
+
+        <div class="headerRightCluster">
+        <div id="saveStatus" class="saveStatus">Ready</div>
+
+        <div class="headerActions">
+            <button id="newNoteBtn" class="topIconBtn primaryBtn" title="New note" aria-label="New note">＋</button>
+            <button id="duplicateNoteBtn" class="topIconBtn" title="Duplicate note" aria-label="Duplicate note">⧉</button>
+            <button id="favoriteBtn" class="topIconBtn" title="Favorite note" aria-label="Favorite note">★</button>
+            <button id="toggleToolsBtn" class="topIconBtn" title="Tools" aria-label="Tools" aria-expanded="false">🛠</button>
+            <button id="toggleDrawerBtn" class="topIconBtn" title="Notes" aria-label="Notes" aria-expanded="false">☰</button>
+        </div>
+        </div>
+    </div>
+    </header>
+
+    <section id="toolsPanel" class="toolsPanel" aria-hidden="true">
+    <div class="toolsScroll">
+        <div class="toolGrid">
+        <section class="toolCard">
+            <div class="toolCardTitle">Text Format</div>
+            <div class="toolGroup">
+            <button data-cmd="bold" title="Bold"><b>B</b></button>
+            <button data-cmd="italic" title="Italic"><i>I</i></button>
+            <button data-cmd="underline" title="Underline"><u>U</u></button>
+            <button data-cmd="insertUnorderedList" title="Bullet List">• List</button>
+            <button data-cmd="insertOrderedList" title="Numbered List">1. List</button>
+            <button id="quoteBtn" title="Quote">❝ Quote</button>
+            <button id="codeBtn" title="Code">&lt;/&gt; Code</button>
+            <button id="hrBtn" title="Divider">— Divider</button>
+            <button id="clearFormattingBtn" title="Clear Formatting">Tx Clear</button>
+            </div>
+        </section>
+
+        <section class="toolCard">
+            <div class="toolCardTitle">Insert</div>
+            <div class="toolGroup">
+            <button id="linkBtn" title="Insert Link">🔗 Link</button>
+
+            <label class="toolButtonLike wideBtn" title="Add image">
+                🖼 Image
+                <input id="imageInput" type="file" accept="image/*" multiple hidden />
+            </label>
+            </div>
+        </section>
+
+        <section class="toolCard">
+            <div class="toolCardTitle">Tables</div>
+            <div class="toolGroup">
+            <button id="tableBtn" title="Insert Table">▦ New</button>
+            <button id="tableRowBtn" title="Add Table Row">+ Row</button>
+            <button id="tableColBtn" title="Add Table Column">+ Column</button>
+            <button id="tableDeleteRowBtn" title="Delete Table Row">- Row</button>
+            <button id="tableDeleteColBtn" title="Delete Table Column">- Column</button>
+            </div>
+        </section>
+
+        <section class="toolCard">
+            <div class="toolCardTitle">Images</div>
+            <div class="toolGroup">
+            <button id="imgSmallerBtn" title="Smaller Image">Smaller</button>
+            <button id="imgLargerBtn" title="Larger Image">Larger</button>
+            </div>
+        </section>
+
+        <section class="toolCard">
+            <div class="toolCardTitle">Organize</div>
+            <div class="toolFieldWrap">
+            <label for="tagsInput" class="toolFieldLabel">Tags</label>
+            <input id="tagsInput" class="toolInput" type="text" placeholder="study, web, idea" />
+            </div>
+        </section>
+
+        <section class="toolCard">
+            <div class="toolCardTitle">Export & Backup</div>
+            <div class="toolGroup">
+            <button id="exportNativeBtn">.ndock</button>
+            <button id="exportTxtBtn">TXT</button>
+            <button id="exportHtmlBtn">HTML</button>
+            <button id="exportMdBtn">MD</button>
+            <button id="exportPdfBtn">PDF</button>
+            <button id="backupAllBtn" class="wideBtn">Backup All</button>
+            </div>
+        </section>
+
+        <section class="toolCard">
+            <div class="toolCardTitle">Import & Note Actions</div>
+            <div class="toolGroup">
+            <label class="toolButtonLike wideBtn" title="Import note">
+                Import Note
+                <input id="importInput" type="file" accept=".ndock,application/json" hidden />
+            </label>
+
+            <label class="toolButtonLike wideBtn" title="Restore workspace">
+                Restore All
+                <input id="restoreAllInput" type="file" accept=".ndbackup,application/json" hidden />
+            </label>
+
+            <button id="deleteBtn" class="dangerBtn">Trash</button>
+            <button id="restoreBtn" hidden>Restore</button>
+            <button id="deletePermanentBtn" class="dangerBtn" hidden>Delete Forever</button>
+            </div>
+        </section>
+        </div>
+    </div>
+    </section>
+
+    <section class="editorShell">
+    <main class="editorMain" id="editorMain">
+        <div class="editorCanvas">
+        <div
+            id="editor"
+            class="editor"
+            contenteditable="true"
+            spellcheck="false"
+            data-placeholder="Write notes here... Paste images, drag images, add links, make lists, use tables, and capture useful information while browsing."
+        ></div>
+        </div>
+    </main>
+    </section>
+
+    <footer id="notesDrawer" class="notesDrawer">
+    <div class="drawerHeader">
+        <div class="drawerTitle">Notes</div>
+
+        <div class="drawerHeaderActions">
+        <div class="drawerFilters">
+            <button id="showActiveBtn" class="drawerFilterBtn active">Active</button>
+            <button id="showTrashBtn" class="drawerFilterBtn">Trash</button>
+        </div>
+
+        <input id="searchInput" class="drawerSearch" type="text" placeholder="Search notes..." />
+        <button id="collapseDrawerBtn" class="drawerCloseBtn">Close</button>
+        </div>
+    </div>
+
+    <div id="notesList" class="notesList"></div>
+    </footer>
+</div>
+
+<script src="sidepanel.js"></script>
+</body>
+</html>
