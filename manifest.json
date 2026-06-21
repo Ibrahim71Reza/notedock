@@ -6,7 +6,7 @@
 "permissions": [
     "storage",
     "downloads",
-    "tabs",
+    "activeTab",
     "unlimitedStorage",
     "contextMenus",
     "sidePanel"

@@ -71,19 +71,19 @@ api.runtime.onInstalled.addListener(() => {
 createMenus();
 });
 
-api.runtime.onStartup?.addListener(() => {
-createMenus();
-});
-
 // For Chrome Side Panel behavior
+let hasNativeSidePanelClick = false;
 if (api.sidePanel && api.sidePanel.setPanelBehavior) {
-api.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(console.error);
+    api.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(console.error);
+    hasNativeSidePanelClick = true;
 }
 
 // Fallback for Firefox or older setups
-api.action.onClicked.addListener(async (tab) => {
-await openExtensionSidebar(tab);
-});
+if (!hasNativeSidePanelClick) {
+    api.action.onClicked.addListener(async (tab) => {
+        await openExtensionSidebar(tab);
+    });
+}
 
 api.contextMenus.onClicked.addListener(async (info, tab) => {
 try {

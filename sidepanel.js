@@ -14,7 +14,7 @@ activeNoteId: null,
 search: "",
 saveTimer: null,
 lastRange: null,
-isToolsOpen: false,
+isToolsOpen: true,
 isDrawerOpen: false,
 objectUrls: new Map(),
 showTrash: false,
@@ -313,7 +313,7 @@ if (saved?.notes?.length) {
     sortNotes();
 
     state.activeNoteId = saved.activeNoteId || state.notes[0]?.id || null;
-    state.isToolsOpen = Boolean(saved.isToolsOpen);
+    state.isToolsOpen = saved.isToolsOpen !== undefined ? Boolean(saved.isToolsOpen) : true;
     state.isDrawerOpen = Boolean(saved.isDrawerOpen);
     state.showTrash = Boolean(saved.showTrash);
 } else {
@@ -377,18 +377,18 @@ persistState();
 }
 
 function debounceSave() {
-setStatus("Saving...");
-clearTimeout(state.saveTimer);
+    setStatus("Saving...");
+    clearTimeout(state.saveTimer);
 
-state.saveTimer = setTimeout(async () => {
-    const active = getActiveNote();
-    if (active) active.updatedAt = nowIso();
-    sortNotes();
-    await persistState();
-    renderNotesList();
-    await cleanupUnusedImages();
-    setStatus(`Autosaved • ${formatTime(nowIso())}`);
-}, 450);
+    state.saveTimer = setTimeout(async () => {
+        const active = getActiveNote();
+        if (active) active.updatedAt = nowIso();
+        sortNotes();
+        await persistState();
+        renderNotesList();
+        // REMOVED: await cleanupUnusedImages(); <-- Delete this line here
+        setStatus(`Autosaved • ${formatTime(nowIso())}`);
+    }, 450);
 }
 
 function sortNotes() {
@@ -413,10 +413,10 @@ deletePermanentBtn.hidden = !isTrashed;
 }
 
 function renderNotesList() {
-notesList.innerHTML = "";
-const q = state.search.trim().toLowerCase();
+  notesList.innerHTML = "";
+  const q = state.search.trim().toLowerCase();
 
-const filtered = state.notes.filter(note => {
+  const filtered = state.notes.filter(note => {
     if (note.trashed !== state.showTrash) return false;
     if (!q) return true;
 
@@ -424,30 +424,50 @@ const filtered = state.notes.filter(note => {
     const tagText = (note.tags || []).join(" ").toLowerCase();
 
     return (
-    note.title.toLowerCase().includes(q) ||
-    preview.toLowerCase().includes(q) ||
-    tagText.includes(q)
+      note.title.toLowerCase().includes(q) ||
+      preview.toLowerCase().includes(q) ||
+      tagText.includes(q)
     );
-});
+  });
 
-for (const note of filtered) {
+  for (const note of filtered) {
     const item = document.createElement("div");
     item.className =
-    "noteItem" +
-    (note.id === state.activeNoteId ? " active" : "") +
-    (note.favorite ? " favorite" : "") +
-    (note.trashed ? " trashed" : "");
+      "noteItem" +
+      (note.id === state.activeNoteId ? " active" : "") +
+      (note.favorite ? " favorite" : "") +
+      (note.trashed ? " trashed" : "");
 
-    if (note.trashed) {
-    const trash = document.createElement("div");
-    trash.className = "noteItemTrash";
-    trash.textContent = "🗑";
-    item.appendChild(trash);
-    } else if (note.favorite) {
-    const star = document.createElement("div");
-    star.className = "noteItemStar";
-    star.textContent = "★";
-    item.appendChild(star);
+    // Quick Action Buttons (Trash / Delete Forever)
+    const actionBtn = document.createElement("button");
+    actionBtn.className = "quickActionBtn";
+    
+    if (!state.showTrash) {
+      // Active Notes -> Quick Trash Button
+      actionBtn.innerHTML = "🗑️";
+      actionBtn.title = "Move to Trash";
+      actionBtn.onclick = (e) => {
+        e.stopPropagation(); // Prevents opening the note when clicking trash
+        quickTrashNote(note.id);
+      };
+      item.appendChild(actionBtn);
+
+      // Keep the favorite star visible
+      if (note.favorite) {
+        const star = document.createElement("div");
+        star.className = "noteItemStar";
+        star.textContent = "★";
+        item.appendChild(star);
+      }
+    } else {
+      // Trashed Notes -> Permanent Delete Button
+      actionBtn.innerHTML = "❌";
+      actionBtn.title = "Delete Forever";
+      actionBtn.onclick = (e) => {
+        e.stopPropagation();
+        quickDeleteForever(note.id);
+      };
+      item.appendChild(actionBtn);
     }
 
     const title = document.createElement("div");
@@ -467,20 +487,47 @@ for (const note of filtered) {
     item.appendChild(preview);
 
     if (note.tags?.length) {
-    const tagsWrap = document.createElement("div");
-    tagsWrap.className = "noteTags";
-    for (const tag of note.tags.slice(0, 4)) {
+      const tagsWrap = document.createElement("div");
+      tagsWrap.className = "noteTags";
+      for (const tag of note.tags.slice(0, 4)) {
         const badge = document.createElement("span");
         badge.className = "noteTag";
         badge.textContent = tag;
         tagsWrap.appendChild(badge);
-    }
-    item.appendChild(tagsWrap);
+      }
+      item.appendChild(tagsWrap);
     }
 
     item.addEventListener("click", () => openNote(note.id));
     notesList.appendChild(item);
+  }
 }
+
+async function quickTrashNote(noteId) {
+  const note = state.notes.find(n => n.id === noteId);
+  if (!note) return;
+  note.trashed = true;
+  note.favorite = false;
+  note.updatedAt = nowIso();
+  sortNotes();
+  ensureValidActiveNote();
+  await renderAll();
+  debounceSave();
+}
+
+async function quickDeleteForever(noteId) {
+  const note = state.notes.find(n => n.id === noteId);
+  if (!note) return;
+  const confirmed = confirm(`Permanently delete "${note.title}"? This cannot be undone.`);
+  if (!confirmed) return;
+  
+  await deleteImagesReferencedInHtml(note.contentHtml);
+  state.notes = state.notes.filter(n => n.id !== noteId);
+  ensureValidActiveNote();
+  await renderAll();
+  await cleanupUnusedImages();
+  await persistState();
+  setStatus("Deleted permanently");
 }
 
 async function resolveHtmlForEditor(html) {

@@ -323,28 +323,35 @@ flex: 1 1 auto;
 }
 
 .editorMain {
-flex: 1 1 auto;
-min-height: 0;
-overflow: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .editorCanvas {
-min-width: 100%;
-width: max-content;
-min-height: 100%;
+  width: 100%;             /* Fixes the infinite horizontal scrolling */
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;           /* Adds space around the page block */
 }
 
 .editor {
-min-height: 100%;
-min-width: 100%;
-padding: 12px 14px 40px;
-outline: none;
-font-size: 15px;
-line-height: 1.75;
-color: var(--text);
-white-space: pre-wrap;
-overflow-wrap: normal;
-caret-color: #d8e7ff;
+  flex: 1 1 auto;          /* Makes the block stretch to the bottom */
+  background: #f4f7f9;     /* The Off-White block you requested */
+  color: #111827;          /* Dark text so it's readable on off-white */
+  border-radius: 12px;
+  padding: 20px;
+  outline: none;
+  font-size: 15px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: break-word; /* Forces pasted text to wrap inside the block */
+  word-break: break-word;    /* Forces long links to wrap */
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  caret-color: #000;       /* Makes the typing cursor black */
 }
 
 .editor.image-select-mode {
@@ -364,9 +371,9 @@ pointer-events: none;
 }
 
 .editor a {
-color: #7cd0ff;
-text-decoration: underline;
-cursor: pointer;
+  color: #0d6efd;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .editor img.inline-note-image {
@@ -389,21 +396,24 @@ outline-offset: 2px;
 
 .editor blockquote {
 margin: 12px 0;
-padding: 10px 12px;
-border-left: 4px solid var(--accent);
-background: rgba(118, 169, 255, 0.08);
-border-radius: 10px;
-color: #e5efff;
+padding: 10px 14px;
+border-left: 4px solid var(--accent-2);
+background: #e9ecef; /* Soft ash background */
+color: #334155;      /* Dark gray text for readability */
+border-radius: 0 8px 8px 0;
 }
 
 .editor pre.note-code {
 margin: 12px 0;
-padding: 12px;
-background: #09111d;
-border: 1px solid var(--border);
-border-radius: 12px;
+padding: 14px;
+background: #e2e8f0; /* Medium-light ash gray */
+color: #0f172a;      /* Almost black text for perfect contrast */
+border: 1px solid #cbd5e1;
+border-radius: 8px;
 overflow: auto;
 white-space: pre;
+font-family: "Courier New", Courier, monospace; /* Makes it look like real code */
+font-size: 13.5px;
 }
 
 .editor hr {
@@ -413,24 +423,22 @@ margin: 16px 0;
 }
 
 .editor table.note-table {
-border-collapse: collapse;
-margin: 14px 0;
-min-width: 420px;
-background: #0d1522;
+  border-collapse: collapse;
+  margin: 14px 0;
+  min-width: 100%;
+  background: #ffffff;
+  color: #000;
 }
 
 .editor table.note-table th,
 .editor table.note-table td {
-border: 1px solid var(--border);
-padding: 8px 10px;
-text-align: left;
-vertical-align: top;
-min-width: 90px;
+  border: 1px solid #ced4da;
+  padding: 8px 10px;
 }
 
 .editor table.note-table th {
-background: #152236;
-font-weight: 700;
+  background: #e9ecef;
+  font-weight: 700;
 }
 
 /* notes drawer */
@@ -541,31 +549,54 @@ box-shadow: inset 0 0 0 1px rgba(255, 214, 90, 0.4);
 box-shadow: inset 0 0 0 1px rgba(255, 138, 138, 0.35);
 }
 
-.noteItemStar,
-.noteItemTrash {
-position: absolute;
-top: 10px;
-right: 12px;
-font-size: 13px;
-}
-
 .noteItemStar {
-color: var(--favorite);
-}
-
-.noteItemTrash {
-color: var(--danger);
+  position: absolute;
+  top: 12px;
+  right: 38px; 
+  font-size: 13px;
+  color: var(--favorite);
 }
 
 .noteItemTitle {
-font-weight: 700;
-font-size: 13px;
-margin-bottom: 6px;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
-padding-right: 20px;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 36px; 
 }
+
+.quickActionBtn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(12, 21, 35, 0.8);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 6px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  opacity: 0; /* Hidden by default for a clean UI */
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+.noteItem:hover .quickActionBtn {
+  opacity: 1;
+}
+
+.quickActionBtn:hover {
+  background: var(--danger-bg);
+  color: var(--danger);
+  border-color: var(--danger-border);
+}
+
 
 .noteItemMeta {
 font-size: 11px;
